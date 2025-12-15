@@ -93,8 +93,13 @@ html {
 }
 
 .logo-navbar {
-    height: 45px;
+    height: 50px;
     width: auto;
+    transition: transform var(--transition-speed);
+}
+
+.navbar-brand:hover .logo-navbar {
+    transform: scale(1.05);
 }
 
 .brand-text {
@@ -737,8 +742,9 @@ html {
 }
 
 .footer-logo {
-    height: 60px;
+    height: 70px;
     width: auto;
+    filter: brightness(1.1);
 }
 
 .footer-brand-text {
