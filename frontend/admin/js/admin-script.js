@@ -6,10 +6,26 @@
 document.addEventListener('DOMContentLoaded', function() {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
+    const mainContent = document.querySelector('.main-content');
 
     if (sidebarToggle && sidebar) {
-        sidebarToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
+        sidebarToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            // Para desktop: colapsar/expandir
+            if (window.innerWidth > 991) {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('sidebar-collapsed');
+                sidebarToggle.classList.toggle('active');
+                
+                // Guardar estado en localStorage
+                const isCollapsed = sidebar.classList.contains('collapsed');
+                localStorage.setItem('sidebarCollapsed', isCollapsed);
+            } 
+            // Para móvil: mostrar/ocultar
+            else {
+                sidebar.classList.toggle('active');
+            }
         });
 
         // Cerrar sidebar al hacer click fuera en móvil
@@ -18,6 +34,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target)) {
                     sidebar.classList.remove('active');
                 }
+            }
+        });
+
+        // Restaurar estado del sidebar desde localStorage
+        const savedState = localStorage.getItem('sidebarCollapsed');
+        if (savedState === 'true' && window.innerWidth > 991) {
+            sidebar.classList.add('collapsed');
+            mainContent.classList.add('sidebar-collapsed');
+            sidebarToggle.classList.add('active');
+        }
+
+        // Ajustar comportamiento al cambiar tamaño de ventana
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 991) {
+                sidebar.classList.remove('active');
+                // Restaurar estado colapsado si estaba guardado
+                const savedState = localStorage.getItem('sidebarCollapsed');
+                if (savedState === 'true') {
+                    sidebar.classList.add('collapsed');
+                    mainContent.classList.add('sidebar-collapsed');
+                    sidebarToggle.classList.add('active');
+                } else {
+                    sidebar.classList.remove('collapsed');
+                    mainContent.classList.remove('sidebar-collapsed');
+                    sidebarToggle.classList.remove('active');
+                }
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('sidebar-collapsed');
             }
         });
     }
