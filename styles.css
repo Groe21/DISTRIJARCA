@@ -93,13 +93,18 @@ html {
 }
 
 .logo-navbar {
-    height: 50px;
-    width: auto;
+    height: 70px;
+    width: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: var(--color-blanco-crema);
+    padding: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: transform var(--transition-speed);
 }
 
 .navbar-brand:hover .logo-navbar {
-    transform: scale(1.05);
+    transform: scale(1.1) rotate(5deg);
 }
 
 .brand-text {
@@ -125,6 +130,26 @@ html {
 .navbar-nav .nav-link.active {
     background-color: var(--color-rojo-intenso);
     transform: translateY(-2px);
+}
+
+/* Botón Admin en Navbar */
+.btn-admin {
+    background: linear-gradient(135deg, var(--color-amarillo-queso), var(--color-rosa-salmon));
+    color: var(--color-azul-oscuro) !important;
+    padding: 0.5rem 1.25rem !important;
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    transition: all var(--transition-speed);
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    border: 2px solid transparent;
+}
+
+.btn-admin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(249, 178, 51, 0.4);
+    border-color: var(--color-azul-oscuro);
 }
 
 /* ========== HERO SECTION ========== */
@@ -742,9 +767,14 @@ html {
 }
 
 .footer-logo {
-    height: 70px;
-    width: auto;
-    filter: brightness(1.1);
+    height: 110px;
+    width: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: var(--color-blanco-crema);
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.05);
 }
 
 .footer-brand-text {
