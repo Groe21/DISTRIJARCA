@@ -220,8 +220,13 @@
             <div class="login-body">
                 @if($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        {{ $errors->first() }}
+                        <div class="d-flex align-items-center">
+                            <img src="{{ asset('assets/error-login.gif') }}" alt="Error" style="width: 50px; height: 50px; margin-right: 10px;">
+                            <div>
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                {{ $errors->first() }}
+                            </div>
+                        </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
