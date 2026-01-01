@@ -14,4 +14,4 @@ cmds = [
 ]
 
 [start]
-cmd = "cd backend/distrijarca-api && php artisan migrate --force && php artisan storage:link && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"
+cmd = "cd backend/distrijarca-api && php artisan migrate --force && php artisan storage:link && php -S 0.0.0.0:${PORT:-8000} -t public"
