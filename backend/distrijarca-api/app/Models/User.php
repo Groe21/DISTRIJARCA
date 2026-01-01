@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'activo',
+        'last_login',
     ];
 
     /**
@@ -41,5 +44,39 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'last_login' => 'datetime',
+        'activo' => 'boolean',
     ];
+
+    /**
+     * Relación con logs de actividad
+     */
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
+    /**
+     * Verificar si el usuario es admin
+     */
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Verificar si el usuario es super admin
+     */
+    public function isSuperAdmin()
+    {
+        return $this->role === 'super_admin';
+    }
+
+    /**
+     * Scopes
+     */
+    public function scopeActivos($query)
+    {
+        return $query->where('activo', true);
+    }
 }
