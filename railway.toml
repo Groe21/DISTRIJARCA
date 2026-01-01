@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+buildCommand = "cd backend/distrijarca-api && composer install --no-dev --optimize-autoloader && php artisan config:cache && php artisan route:cache && php artisan view:cache"
+
+[deploy]
+startCommand = "cd backend/distrijarca-api && php artisan migrate --force && php artisan storage:link && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
