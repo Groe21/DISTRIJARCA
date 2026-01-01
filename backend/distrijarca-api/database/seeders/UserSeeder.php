@@ -14,13 +14,16 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Administrador',
-            'email' => 'admin@distrijarca.com',
-            'password' => Hash::make('admin'),
-            'email_verified_at' => now(),
-            'role' => 'super_admin',
-            'activo' => true,
-        ]);
+        // Solo crear el usuario si no existe
+        if (!User::where('email', 'admin@distrijarca.com')->exists()) {
+            User::create([
+                'name' => 'Administrador',
+                'email' => 'admin@distrijarca.com',
+                'password' => Hash::make('admin'),
+                'email_verified_at' => now(),
+                'role' => 'super_admin',
+                'activo' => true,
+            ]);
+        }
     }
 }
