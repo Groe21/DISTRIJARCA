@@ -24,6 +24,10 @@
                 <i class="bi bi-tags"></i>
                 <span>Categorías</span>
             </a>
+            <a href="{{ route('admin.home-sections.index') }}" class="menu-item {{ request()->routeIs('admin.home-sections.*') ? 'active' : '' }}" data-tooltip="Secciones Home">
+                <i class="bi bi-grid-3x3"></i>
+                <span>Secciones Home</span>
+            </a>
             <a href="#" class="menu-item" data-tooltip="Mensajes">
                 <i class="bi bi-envelope"></i>
                 <span>Mensajes</span>

@@ -31,16 +31,37 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'nombre' => 'required|string|max:255',
+            'marca' => 'nullable|string|max:100',
             'descripcion' => 'nullable|string',
-            'precio' => 'required|numeric|min:0',
+            'sku' => 'nullable|string|max:50|unique:products,sku',
+            'codigo_barras' => 'nullable|string|max:50',
+            'precio_caja' => 'required|numeric|min:0',
+            'precio_unidad' => 'nullable|numeric|min:0',
+            'precio_mayoreo' => 'nullable|numeric|min:0',
+            'unidades_por_caja' => 'required|integer|min:1',
+            'peso_caja' => 'nullable|numeric|min:0',
+            'peso_unidad' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'cantidad_minima_pedido' => 'required|integer|min:1',
+            'cantidad_mayoreo' => 'nullable|integer|min:1',
+            'stock_alerta' => 'required|integer|min:0',
             'unidad_medida' => 'required|string',
             'caracteristicas' => 'nullable|string',
+            'origen' => 'nullable|string|max:100',
+            'fecha_vencimiento' => 'nullable|date',
+            'dias_caducidad' => 'nullable|integer|min:1',
+            'temperatura_almacenamiento' => 'nullable|string|max:100',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        // Normalizar el precio
-        $validated['precio'] = str_replace(',', '.', $validated['precio']);
+        // Normalizar precios
+        $validated['precio_caja'] = str_replace(',', '.', $validated['precio_caja']);
+        if (isset($validated['precio_unidad'])) {
+            $validated['precio_unidad'] = str_replace(',', '.', $validated['precio_unidad']);
+        }
+        if (isset($validated['precio_mayoreo'])) {
+            $validated['precio_mayoreo'] = str_replace(',', '.', $validated['precio_mayoreo']);
+        }
         
         $validated['activo'] = $request->has('activo');
         $validated['destacado'] = $request->has('destacado');
@@ -52,7 +73,7 @@ class ProductController extends Controller
 
         $product = Product::create($validated);
 
-        ActivityLog::log('create_product', "Producto '{$product->nombre}' creado", Product::class, $product->id);
+        ActivityLog::log('create_product', "Producto '{$product->nombre}' creado (SKU: {$product->sku})", Product::class, $product->id);
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Producto creado exitosamente');
@@ -75,16 +96,37 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'nombre' => 'required|string|max:255',
+            'marca' => 'nullable|string|max:100',
             'descripcion' => 'nullable|string',
-            'precio' => 'required|numeric|min:0',
+            'sku' => 'nullable|string|max:50|unique:products,sku,' . $product->id,
+            'codigo_barras' => 'nullable|string|max:50',
+            'precio_caja' => 'required|numeric|min:0',
+            'precio_unidad' => 'nullable|numeric|min:0',
+            'precio_mayoreo' => 'nullable|numeric|min:0',
+            'unidades_por_caja' => 'required|integer|min:1',
+            'peso_caja' => 'nullable|numeric|min:0',
+            'peso_unidad' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'cantidad_minima_pedido' => 'required|integer|min:1',
+            'cantidad_mayoreo' => 'nullable|integer|min:1',
+            'stock_alerta' => 'required|integer|min:0',
             'unidad_medida' => 'required|string',
             'caracteristicas' => 'nullable|string',
+            'origen' => 'nullable|string|max:100',
+            'fecha_vencimiento' => 'nullable|date',
+            'dias_caducidad' => 'nullable|integer|min:1',
+            'temperatura_almacenamiento' => 'nullable|string|max:100',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        // Normalizar el precio
-        $validated['precio'] = str_replace(',', '.', $validated['precio']);
+        // Normalizar precios
+        $validated['precio_caja'] = str_replace(',', '.', $validated['precio_caja']);
+        if (isset($validated['precio_unidad'])) {
+            $validated['precio_unidad'] = str_replace(',', '.', $validated['precio_unidad']);
+        }
+        if (isset($validated['precio_mayoreo'])) {
+            $validated['precio_mayoreo'] = str_replace(',', '.', $validated['precio_mayoreo']);
+        }
         
         $validated['activo'] = $request->has('activo');
         $validated['destacado'] = $request->has('destacado');
@@ -100,7 +142,7 @@ class ProductController extends Controller
 
         $product->update($validated);
 
-        ActivityLog::log('update_product', "Producto '{$product->nombre}' actualizado", Product::class, $product->id);
+        ActivityLog::log('update_product', "Producto '{$product->nombre}' actualizado (SKU: {$product->sku})", Product::class, $product->id);
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Producto actualizado exitosamente');

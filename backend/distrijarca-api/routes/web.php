@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\HomeSectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,12 @@ use App\Http\Controllers\Admin\ProductController;
 
 // Página principal
 Route::get('/', function () {
-    return view('home');
+    $sections = \App\Models\HomeSection::with('category')
+        ->activas()
+        ->ordenadas()
+        ->get();
+    
+    return view('home', compact('sections'));
 })->name('home');
 
 // Formulario de contacto
@@ -54,4 +60,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('products', ProductController::class)->names('admin.products');
     Route::patch('/products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('admin.products.toggle-status');
     Route::patch('/products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('admin.products.toggle-featured');
+
+    // Gestión de secciones de la página principal
+    Route::resource('home-sections', HomeSectionController::class)->names('admin.home-sections');
+    Route::patch('/home-sections/{homeSection}/toggle-status', [HomeSectionController::class, 'toggleStatus'])->name('admin.home-sections.toggle-status');
+    Route::post('/home-sections/update-orden', [HomeSectionController::class, 'updateOrden'])->name('admin.home-sections.update-orden');
 });

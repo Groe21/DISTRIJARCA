@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+// Rutas públicas para la página principal
+Route::prefix('home')->group(function () {
+    Route::get('/sections', [HomeController::class, 'getSections']);
+    Route::get('/sections/{id}', [HomeController::class, 'getSection']);
 });

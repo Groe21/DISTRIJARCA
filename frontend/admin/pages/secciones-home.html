@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secciones Home - DISTRI-JARCA Admin</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/admin-styles.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="../../assets/logo-distrijarca.png" alt="Logo" class="sidebar-logo">
+            <h4>DISTRI-<span class="text-danger">JARCA</span></h4>
+            <p class="text-muted small mb-0">Panel Administrativo</p>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-section">
+                <h6 class="menu-title">PRINCIPAL</h6>
+                <a href="../dashboard.html" class="menu-item">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <h6 class="menu-title">GESTIÓN DE CONTENIDO</h6>
+                <a href="productos.html" class="menu-item">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Productos</span>
+                </a>
+                <a href="categorias.html" class="menu-item">
+                    <i class="bi bi-tags"></i>
+                    <span>Categorías</span>
+                </a>
+                <a href="secciones-home.html" class="menu-item active">
+                    <i class="bi bi-grid-3x3"></i>
+                    <span>Secciones Home</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="top-bar">
+            <button class="btn btn-link text-dark" id="sidebarToggle">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+            <div class="ms-auto d-flex align-items-center">
+                <span class="me-3">Admin</span>
+                <button class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-box-arrow-right"></i> Salir
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenido -->
+        <div class="content-area">
+            <div class="container-fluid">
+                <!-- Título y Botón -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2><i class="bi bi-grid-3x3 me-2"></i>Secciones de la Página Principal</h2>
+                        <p class="text-muted">Administra las secciones de productos destacados que aparecen en la home</p>
+                    </div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSeccion">
+                        <i class="bi bi-plus-lg me-2"></i>Nueva Sección
+                    </button>
+                </div>
+
+                <!-- Alertas -->
+                <div id="alertContainer"></div>
+
+                <!-- Tabla de Secciones -->
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th width="50">Orden</th>
+                                        <th width="100">Imagen</th>
+                                        <th>Título</th>
+                                        <th>Categoría</th>
+                                        <th>Badge</th>
+                                        <th width="100">Max Prods.</th>
+                                        <th width="80">Estado</th>
+                                        <th width="150">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaSecciones">
+                                    <tr>
+                                        <td colspan="8" class="text-center py-5">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Cargando...</span>
+                                            </div>
+                                            <p class="mt-2 text-muted">Cargando secciones...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Crear/Editar Sección -->
+    <div class="modal fade" id="modalSeccion" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">
+                        <i class="bi bi-plus-circle me-2"></i>Nueva Sección
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formSeccion" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <input type="hidden" id="seccionId">
+                        
+                        <!-- Fila 1: Categoría y Orden -->
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label">Categoría <span class="text-danger">*</span></label>
+                                <select class="form-select" id="category_id" required>
+                                    <option value="">Seleccione una categoría...</option>
+                                </select>
+                                <small class="text-muted">Se mostrarán los productos destacados de esta categoría</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Orden <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="orden" min="0" value="1" required>
+                            </div>
+                        </div>
+
+                        <!-- Título -->
+                        <div class="mb-3">
+                            <label class="form-label">Título de la Sección <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="titulo" placeholder="Ej: Quesos Artesanales" required>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-3">
+                            <label class="form-label">Descripción <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="descripcion" rows="3" maxlength="500" required 
+                                placeholder="Descripción breve de la sección (máx. 500 caracteres)"></textarea>
+                            <small class="text-muted"><span id="charCount">0</span>/500 caracteres</small>
+                        </div>
+
+                        <!-- Fila 2: Badge -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Texto del Badge</label>
+                                <input type="text" class="form-control" id="badge_texto" placeholder="Ej: Premium, Selectos">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Color del Badge</label>
+                                <select class="form-select" id="badge_color">
+                                    <option value="danger">Rojo (danger)</option>
+                                    <option value="primary">Azul (primary)</option>
+                                    <option value="warning">Amarillo (warning)</option>
+                                    <option value="success">Verde (success)</option>
+                                    <option value="info">Celeste (info)</option>
+                                    <option value="dark">Negro (dark)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Fila 3: Ícono y Max Productos -->
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label">Ícono <span class="text-danger">*</span></label>
+                                <select class="form-select" id="icono" required>
+                                    <option value="bi-star">⭐ Estrella</option>
+                                    <option value="bi-gem">💎 Diamante</option>
+                                    <option value="bi-gift">🎁 Regalo</option>
+                                    <option value="bi-award">🏆 Premio</option>
+                                    <option value="bi-heart">❤️ Corazón</option>
+                                    <option value="bi-fire">🔥 Fuego</option>
+                                    <option value="bi-trophy">🏆 Trofeo</option>
+                                    <option value="bi-box-seam">📦 Caja</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Max Productos</label>
+                                <input type="number" class="form-control" id="max_productos" min="1" max="10" value="3">
+                            </div>
+                        </div>
+
+                        <!-- Imagen -->
+                        <div class="mb-3">
+                            <label class="form-label">Imagen de la Sección <span class="text-danger" id="imagenRequerida">*</span></label>
+                            <input type="file" class="form-control" id="imagen" accept="image/jpeg,image/png,image/jpg,image/webp">
+                            <small class="text-muted">Formatos: JPG, PNG, WEBP. Tamaño máx: 2MB. Recomendado: 800x600px</small>
+                            <div id="imagenPreview" class="mt-2"></div>
+                        </div>
+
+                        <!-- Estado Activo -->
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="activo" checked>
+                            <label class="form-check-label" for="activo">
+                                Sección activa (visible en la página principal)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg me-2"></i>Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-2"></i>Guardar Sección
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/admin-script.js"></script>
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        const ADMIN_URL = 'http://localhost:8000/admin';
+
+        // Cargar secciones al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarCategorias();
+            cargarSecciones();
+
+            // Contador de caracteres
+            document.getElementById('descripcion').addEventListener('input', function() {
+                document.getElementById('charCount').textContent = this.value.length;
+            });
+
+            // Preview de imagen
+            document.getElementById('imagen').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('imagenPreview').innerHTML = 
+                            `<img src="${e.target.result}" class="img-thumbnail" style="max-height: 150px">`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Submit del formulario
+            document.getElementById('formSeccion').addEventListener('submit', guardarSeccion);
+        });
+
+        // Cargar categorías
+        async function cargarCategorias() {
+            try {
+                const response = await fetch(`${ADMIN_URL}/categories`);
+                const html = await response.text();
+                
+                // Parsear el HTML para extraer categorías
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const select = document.getElementById('category_id');
+                
+                // Por ahora, categorías hardcoded (después integraremos con Laravel)
+                const categorias = [
+                    { id: 1, nombre: 'Quesos' },
+                    { id: 2, nombre: 'Embutidos' },
+                    { id: 3, nombre: 'Jamones' },
+                    { id: 4, nombre: 'Productos Especiales' }
+                ];
+
+                categorias.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.textContent = cat.nombre;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error al cargar categorías:', error);
+            }
+        }
+
+        // Cargar secciones
+        async function cargarSecciones() {
+            try {
+                const response = await fetch(`${API_URL}/home/sections`);
+                const data = await response.json();
+
+                const tbody = document.getElementById('tablaSecciones');
+                
+                if (data.success && data.data.length > 0) {
+                    tbody.innerHTML = data.data.map(seccion => `
+                        <tr>
+                            <td class="text-center fw-bold">${seccion.id}</td>
+                            <td>
+                                <img src="${seccion.imagen_url}" class="img-thumbnail" style="height: 50px; width: 70px; object-fit: cover;">
+                            </td>
+                            <td>
+                                <strong>${seccion.titulo}</strong>
+                                <br><small class="text-muted">${seccion.descripcion.substring(0, 60)}...</small>
+                            </td>
+                            <td>
+                                <span class="badge bg-info">${seccion.categoria.nombre}</span>
+                            </td>
+                            <td>
+                                ${seccion.badge.texto ? 
+                                    `<span class="badge bg-${seccion.badge.color}">${seccion.badge.texto}</span>` 
+                                    : '<span class="text-muted">-</span>'}
+                            </td>
+                            <td class="text-center">${seccion.productos.length} / ${seccion.max_productos || 3}</td>
+                            <td class="text-center">
+                                <span class="badge bg-success">Activa</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="editarSeccion(${seccion.id})" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="eliminarSeccion(${seccion.id})" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <i class="bi bi-inbox display-4 text-muted"></i>
+                                <p class="mt-3 text-muted">No hay secciones creadas aún</p>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSeccion">
+                                    <i class="bi bi-plus-lg me-2"></i>Crear Primera Sección
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error al cargar secciones:', error);
+                mostrarAlerta('Error al cargar las secciones', 'danger');
+            }
+        }
+
+        // Guardar sección (crear o editar)
+        async function guardarSeccion(e) {
+            e.preventDefault();
+
+            const seccionId = document.getElementById('seccionId').value;
+            const formData = new FormData();
+
+            // Agregar datos al FormData
+            formData.append('category_id', document.getElementById('category_id').value);
+            formData.append('titulo', document.getElementById('titulo').value);
+            formData.append('descripcion', document.getElementById('descripcion').value);
+            formData.append('badge_texto', document.getElementById('badge_texto').value);
+            formData.append('badge_color', document.getElementById('badge_color').value);
+            formData.append('icono', document.getElementById('icono').value);
+            formData.append('orden', document.getElementById('orden').value);
+            formData.append('max_productos', document.getElementById('max_productos').value);
+            formData.append('activo', document.getElementById('activo').checked ? '1' : '0');
+
+            // Agregar imagen si existe
+            const imagenInput = document.getElementById('imagen');
+            if (imagenInput.files[0]) {
+                formData.append('imagen', imagenInput.files[0]);
+            }
+
+            try {
+                const url = seccionId ? 
+                    `${ADMIN_URL}/home-sections/${seccionId}` : 
+                    `${ADMIN_URL}/home-sections`;
+                
+                const method = seccionId ? 'PUT' : 'POST';
+
+                // Simulación de guardado (en producción conectar con Laravel)
+                console.log('Guardando sección:', Object.fromEntries(formData));
+                
+                // Cerrar modal y recargar
+                bootstrap.Modal.getInstance(document.getElementById('modalSeccion')).hide();
+                mostrarAlerta('Sección guardada exitosamente', 'success');
+                
+                setTimeout(() => {
+                    cargarSecciones();
+                }, 500);
+
+            } catch (error) {
+                console.error('Error al guardar:', error);
+                mostrarAlerta('Error al guardar la sección', 'danger');
+            }
+        }
+
+        // Editar sección
+        async function editarSeccion(id) {
+            try {
+                const response = await fetch(`${API_URL}/home/sections/${id}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const seccion = result.data;
+                    
+                    // Cambiar título del modal
+                    document.getElementById('modalTitle').innerHTML = 
+                        '<i class="bi bi-pencil me-2"></i>Editar Sección';
+                    
+                    // Llenar formulario
+                    document.getElementById('seccionId').value = seccion.id;
+                    document.getElementById('category_id').value = seccion.categoria.id;
+                    document.getElementById('titulo').value = seccion.titulo;
+                    document.getElementById('descripcion').value = seccion.descripcion;
+                    document.getElementById('badge_texto').value = seccion.badge.texto;
+                    document.getElementById('badge_color').value = seccion.badge.color;
+                    document.getElementById('icono').value = seccion.icono;
+                    document.getElementById('orden').value = seccion.id;
+                    document.getElementById('activo').checked = true;
+                    
+                    // Marcar imagen como no requerida al editar
+                    document.getElementById('imagenRequerida').classList.add('d-none');
+                    document.getElementById('imagen').removeAttribute('required');
+                    
+                    // Mostrar preview de imagen actual
+                    document.getElementById('imagenPreview').innerHTML = 
+                        `<img src="${seccion.imagen_url}" class="img-thumbnail" style="max-height: 150px">
+                         <p class="small text-muted mt-2">Imagen actual. Deja el campo vacío para mantenerla.</p>`;
+                    
+                    // Abrir modal
+                    new bootstrap.Modal(document.getElementById('modalSeccion')).show();
+                }
+            } catch (error) {
+                console.error('Error al cargar sección:', error);
+                mostrarAlerta('Error al cargar la sección', 'danger');
+            }
+        }
+
+        // Eliminar sección
+        async function eliminarSeccion(id) {
+            if (confirm('¿Estás seguro de eliminar esta sección? Esta acción no se puede deshacer.')) {
+                try {
+                    // Simulación (en producción: DELETE request a Laravel)
+                    console.log('Eliminando sección:', id);
+                    mostrarAlerta('Sección eliminada exitosamente', 'success');
+                    
+                    setTimeout(() => {
+                        cargarSecciones();
+                    }, 500);
+                } catch (error) {
+                    console.error('Error al eliminar:', error);
+                    mostrarAlerta('Error al eliminar la sección', 'danger');
+                }
+            }
+        }
+
+        // Mostrar alerta
+        function mostrarAlerta(mensaje, tipo) {
+            const alertHtml = `
+                <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+                    <i class="bi bi-${tipo === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                    ${mensaje}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            document.getElementById('alertContainer').innerHTML = alertHtml;
+            
+            setTimeout(() => {
+                document.getElementById('alertContainer').innerHTML = '';
+            }, 5000);
+        }
+
+        // Resetear formulario al cerrar modal
+        document.getElementById('modalSeccion').addEventListener('hidden.bs.modal', function() {
+            document.getElementById('formSeccion').reset();
+            document.getElementById('seccionId').value = '';
+            document.getElementById('imagenPreview').innerHTML = '';
+            document.getElementById('charCount').textContent = '0';
+            document.getElementById('imagenRequerida').classList.remove('d-none');
+            document.getElementById('imagen').setAttribute('required', 'required');
+            document.getElementById('modalTitle').innerHTML = 
+                '<i class="bi bi-plus-circle me-2"></i>Nueva Sección';
+        });
+    </script>
+</body>
+</html>

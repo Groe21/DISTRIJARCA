@@ -144,117 +144,55 @@
             </div>
 
             <div class="row g-4">
-                <!-- Producto 1: Quesos -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=600" 
-                                 alt="Quesos Premium" 
-                                 class="img-fluid">
-                            <div class="product-badge">Premium</div>
-                        </div>
-                        <div class="product-body">
-                            <div class="product-icon">
-                                <i class="bi bi-star-fill"></i>
+                @forelse($sections as $section)
+                    <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="{{ $section->imagen_url }}" 
+                                     alt="{{ $section->titulo }}" 
+                                     class="img-fluid"
+                                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=600'">
+                                @if($section->badge_texto)
+                                    <div class="product-badge">{{ $section->badge_texto }}</div>
+                                @endif
                             </div>
-                            <h3 class="product-title">Quesos Artesanales</h3>
-                            <p class="product-description">
-                                Amplia variedad de quesos nacionales e importados. 
-                                Desde quesos frescos hasta maduros de alta gama.
-                            </p>
-                            <ul class="product-features">
-                                <li><i class="bi bi-check-circle-fill"></i> Queso fresco</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Queso mozzarella</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Queso maduro</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Quesos importados</li>
-                            </ul>
+                            <div class="product-body">
+                                <div class="product-icon">
+                                    <i class="{{ $section->icono }}"></i>
+                                </div>
+                                <h3 class="product-title">{{ $section->titulo }}</h3>
+                                @if($section->subtitulo)
+                                    <p class="text-muted small mb-2">{{ $section->subtitulo }}</p>
+                                @endif
+                                <p class="product-description">
+                                    {{ $section->descripcion }}
+                                </p>
+                                <ul class="product-features">
+                                    @php
+                                        $productos = $section->getProductosParaMostrar(4);
+                                    @endphp
+                                    @forelse($productos as $producto)
+                                        <li>
+                                            <i class="bi bi-check-circle-fill"></i> 
+                                            {{ $producto->nombre }}
+                                        </li>
+                                    @empty
+                                        <li class="text-muted">
+                                            <i class="bi bi-info-circle"></i> 
+                                            Próximamente productos destacados
+                                        </li>
+                                    @endforelse
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Producto 2: Embutidos -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=600" 
-                                 alt="Embutidos Selectos" 
-                                 class="img-fluid">
-                            <div class="product-badge">Selectos</div>
-                        </div>
-                        <div class="product-body">
-                            <div class="product-icon">
-                                <i class="bi bi-hearts"></i>
-                            </div>
-                            <h3 class="product-title">Embutidos Selectos</h3>
-                            <p class="product-description">
-                                Embutidos tradicionales y gourmet elaborados con las mejores carnes 
-                                y especias seleccionadas.
-                            </p>
-                            <ul class="product-features">
-                                <li><i class="bi bi-check-circle-fill"></i> Chorizo artesanal</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Salami premium</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Mortadela</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Salchichas</li>
-                            </ul>
-                        </div>
+                @empty
+                    <!-- Si no hay secciones, mostrar mensaje -->
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-inbox display-4 text-muted"></i>
+                        <p class="mt-3 text-muted">No hay secciones configuradas aún</p>
                     </div>
-                </div>
-
-                <!-- Producto 3: Jamones -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="https://images.unsplash.com/photo-1624300603167-f5cda2d3fe2c?w=600" 
-                                 alt="Jamones Premium" 
-                                 class="img-fluid">
-                            <div class="product-badge">Gourmet</div>
-                        </div>
-                        <div class="product-body">
-                            <div class="product-icon">
-                                <i class="bi bi-gem"></i>
-                            </div>
-                            <h3 class="product-title">Jamones Premium</h3>
-                            <p class="product-description">
-                                Jamones de primera calidad, curados y cocidos, 
-                                ideales para delicatessen y restaurantes.
-                            </p>
-                            <ul class="product-features">
-                                <li><i class="bi bi-check-circle-fill"></i> Jamón serrano</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Jamón cocido</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Jamón ahumado</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Jamón ibérico</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Producto 4: Productos Especiales -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="https://images.unsplash.com/photo-1530939027401-cca9976c77f7?w=600" 
-                                 alt="Productos Especiales" 
-                                 class="img-fluid">
-                            <div class="product-badge">Especial</div>
-                        </div>
-                        <div class="product-body">
-                            <div class="product-icon">
-                                <i class="bi bi-gift-fill"></i>
-                            </div>
-                            <h3 class="product-title">Productos Especiales</h3>
-                            <p class="product-description">
-                                Selección exclusiva de productos gourmet y especialidades 
-                                para paladares exigentes.
-                            </p>
-                            <ul class="product-features">
-                                <li><i class="bi bi-check-circle-fill"></i> Pâtés artesanales</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Quesos azules</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Productos ibéricos</li>
-                                <li><i class="bi bi-check-circle-fill"></i> Delicatessen</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
     </section>
