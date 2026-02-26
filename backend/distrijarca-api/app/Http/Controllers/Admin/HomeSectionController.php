@@ -16,8 +16,12 @@ class HomeSectionController extends Controller
         $sections = HomeSection::with('category')
             ->ordenadas()
             ->get();
+
+        $hero = \App\Models\HomeHero::first();
+        $about = \App\Models\HomeAbout::first();
+        $contact = \App\Models\HomeContact::first();
         
-        return view('admin.home-sections.index', compact('sections'));
+        return view('admin.home-sections.index', compact('sections', 'hero', 'about', 'contact'));
     }
 
     public function create()

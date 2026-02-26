@@ -56,6 +56,11 @@
                         <i class="bi bi-person me-2"></i>Mi Perfil
                     </a>
                 </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('admin.settings.index') }}">
+                        <i class="bi bi-gear me-2"></i>Configuración de Email
+                    </a>
+                </li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
                     <form action="{{ route('logout') }}" method="POST">

@@ -114,8 +114,10 @@ class UserController extends Controller
     {
         $logs = ActivityLog::with('user')
             ->orderBy('created_at', 'desc')
-            ->paginate(50);
+            ->get();
 
-        return view('admin.users.activity-logs', compact('logs'));
+        $totalLogs = $logs->count();
+
+        return view('admin.users.activity-logs', compact('logs', 'totalLogs'));
     }
 }

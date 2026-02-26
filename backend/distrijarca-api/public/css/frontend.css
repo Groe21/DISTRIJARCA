@@ -156,7 +156,7 @@ html {
 .hero-section {
     position: relative;
     background: linear-gradient(135deg, rgba(16, 37, 66, 0.92) 0%, rgba(26, 58, 92, 0.88) 100%),
-        url('https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=1920');
+        var(--hero-bg, url('https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=1920'));
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

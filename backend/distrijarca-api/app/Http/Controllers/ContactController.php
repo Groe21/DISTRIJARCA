@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Mensaje;
+use App\Mail\NuevoMensajeRecibido;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -18,7 +20,15 @@ class ContactController extends Controller
             'mensaje' => 'required|string',
         ]);
 
-        Mensaje::create($validated);
+        $mensaje = Mensaje::create($validated);
+
+        // Enviar email al administrador
+        try {
+            Mail::to(config('mail.from.address'))->send(new NuevoMensajeRecibido($mensaje));
+        } catch (\Exception $e) {
+            // Si falla el email, no afecta el guardado del mensaje
+            \Log::error('Error enviando email de nuevo mensaje: ' . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'Mensaje enviado correctamente. Nos pondremos en contacto contigo pronto.');
     }

@@ -9,6 +9,11 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\HomeSectionController;
+use App\Http\Controllers\Admin\HomeHeroController;
+use App\Http\Controllers\Admin\HomeAboutController;
+use App\Http\Controllers\Admin\HomeContactController;
+// use App\Http\Controllers\Admin\MensajeController;
+use App\Http\Controllers\Admin\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +32,12 @@ Route::get('/', function () {
         ->activas()
         ->ordenadas()
         ->get();
+
+    $hero = \App\Models\HomeHero::first();
+    $about = \App\Models\HomeAbout::first();
+    $contact = \App\Models\HomeContact::first();
     
-    return view('home', compact('sections'));
+    return view('home', compact('sections', 'hero', 'about', 'contact'));
 })->name('home');
 
 // Formulario de contacto
@@ -65,4 +74,23 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('home-sections', HomeSectionController::class)->names('admin.home-sections');
     Route::patch('/home-sections/{homeSection}/toggle-status', [HomeSectionController::class, 'toggleStatus'])->name('admin.home-sections.toggle-status');
     Route::post('/home-sections/update-orden', [HomeSectionController::class, 'updateOrden'])->name('admin.home-sections.update-orden');
+
+    // Hero principal (solo actualización desde Secciones Home)
+    Route::put('/home-hero', [HomeHeroController::class, 'update'])->name('admin.home-hero.update');
+
+    // Sección Nosotros (solo actualización desde Secciones Home)
+    Route::put('/home-about', [HomeAboutController::class, 'update'])->name('admin.home-about.update');
+
+    // Sección Contacto (solo actualización desde Secciones Home)
+    Route::put('/home-contact', [HomeContactController::class, 'update'])->name('admin.home-contact.update');
+
+    // Gestión de mensajes (DESHABILITADA)
+    // Route::resource('mensajes', MensajeController::class)->names('admin.mensajes')->only(['index', 'show', 'update', 'destroy']);
+    // Route::patch('/mensajes/{mensaje}/marcar-leido', [MensajeController::class, 'marcarLeido'])->name('admin.mensajes.marcar-leido');
+    // Route::patch('/mensajes/{mensaje}/toggle-respondido', [MensajeController::class, 'toggleRespondido'])->name('admin.mensajes.toggle-respondido');
+
+    // Configuración
+    Route::get('/settings/email', [SettingsController::class, 'index'])->name('admin.settings.index');
+    Route::put('/settings/email', [SettingsController::class, 'update'])->name('admin.settings.update');
+    Route::post('/settings/test-email', [SettingsController::class, 'testEmail'])->name('admin.settings.test-email');
 });

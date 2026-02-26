@@ -50,21 +50,6 @@
 
                 <div class="col-lg-3 col-md-6">
                     <div class="stat-card">
-                        <div class="stat-icon bg-warning">
-                            <i class="bi bi-envelope"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>{{ $stats['mensajes_pendientes'] }}</h3>
-                            <p>Mensajes Nuevos</p>
-                            <span class="stat-trend text-warning">
-                                <i class="bi bi-clock"></i> Pendientes
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <div class="stat-card">
                         <div class="stat-icon bg-danger">
                             <i class="bi bi-people"></i>
                         </div>
@@ -110,42 +95,9 @@
                 </div>
             </div>
 
-            <!-- Recent Messages and Products -->
+            <!-- Recent Products -->
             <div class="row g-4">
-                <!-- Recent Messages -->
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Mensajes Recientes</h5>
-                            <a href="#" class="text-primary small">Ver todos</a>
-                        </div>
-                        <div class="card-body p-0">
-                            @forelse($mensajes_recientes as $mensaje)
-                            <div class="message-item {{ $mensaje->leido ? '' : 'unread' }}">
-                                <div class="message-avatar">
-                                    <i class="bi bi-person-circle"></i>
-                                </div>
-                                <div class="message-content">
-                                    <h6>{{ $mensaje->nombre }}</h6>
-                                    <p>{{ Str::limit($mensaje->mensaje, 60) }}</p>
-                                    <span class="text-muted small">{{ $mensaje->created_at->diffForHumans() }}</span>
-                                </div>
-                                @if(!$mensaje->leido)
-                                <span class="badge bg-danger">Nuevo</span>
-                                @endif
-                            </div>
-                            @empty
-                            <div class="text-center py-5">
-                                <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
-                                <p class="text-muted mt-2">No hay mensajes recientes</p>
-                            </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Products -->
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Productos Recientes</h5>

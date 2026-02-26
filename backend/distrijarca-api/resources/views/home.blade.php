@@ -5,7 +5,7 @@
 @section('content')
 
     <!-- ========== HERO SECTION ========== -->
-    <section id="inicio" class="hero-section">
+    <section id="inicio" class="hero-section" style="--hero-bg: url('{{ $hero?->imagen_fondo_url ?? 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=1920' }}');">
         <div class="hero-overlay"></div>
         <div class="hero-particles"></div>
         
@@ -33,8 +33,7 @@
                     </h1>
                     
                     <p class="hero-subtitle mb-5" data-aos="fade-up" data-aos-delay="300">
-                        Más de 15 años distribuyendo productos premium con garantía de frescura.<br>
-                        Somos tu socio confiable en quesos y embutidos de calidad.
+                        {!! nl2br(e($hero?->texto ?? 'Más de 15 años distribuyendo productos premium con garantía de frescura.\nSomos tu socio confiable en quesos y embutidos de calidad.')) !!}
                     </p>
                     
                     <!-- Botones de Acción -->
@@ -82,49 +81,50 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                    <div class="section-label mb-3">Nuestra Historia</div>
+                    <div class="section-label mb-3">{{ $about?->label ?? 'Nuestra Historia' }}</div>
                     <h2 class="section-title mb-4">
-                        Más de <span class="text-highlight">15 años</span> llevando sabor a tu mesa
+                        {{ $about?->title_before ?? 'Más de' }}
+                        <span class="text-highlight">{{ $about?->title_highlight ?? '15 años' }}</span>
+                        {{ $about?->title_after ?? 'llevando sabor a tu mesa' }}
                     </h2>
                     <p class="text-muted mb-4">
-                        En <strong>DISTRI-JARCA</strong>, comenzamos como un pequeño negocio familiar con una 
-                        pasión por los productos lácteos y cárnicos de calidad. Hoy somos reconocidos como uno 
-                        de los principales distribuidores de quesos y embutidos en la región.
+                        {{ $about?->paragraph_1 ?? 'En DISTRI-JARCA, comenzamos como un pequeño negocio familiar con una pasión por los productos lácteos y cárnicos de calidad. Hoy somos reconocidos como uno de los principales distribuidores de quesos y embutidos en la región.' }}
                     </p>
-                    <p class="text-muted mb-4">
-                        Trabajamos directamente con productores seleccionados, garantizando la trazabilidad 
-                        y frescura de cada producto. Nuestra red de distribución cubre toda la región, 
-                        asegurando entregas puntuales y en condiciones óptimas.
-                    </p>
+                    @if(($about?->paragraph_2 ?? null))
+                        <p class="text-muted mb-4">
+                            {{ $about->paragraph_2 }}
+                        </p>
+                    @endif
                     <div class="row mt-5">
                         <div class="col-6 col-md-4 mb-3">
                             <div class="stat-card">
-                                <h3 class="stat-number">15+</h3>
-                                <p class="stat-label">Años de experiencia</p>
+                                <h3 class="stat-number">{{ $about?->stat_1_value ?? '15+' }}</h3>
+                                <p class="stat-label">{{ $about?->stat_1_label ?? 'Años de experiencia' }}</p>
                             </div>
                         </div>
                         <div class="col-6 col-md-4 mb-3">
                             <div class="stat-card">
-                                <h3 class="stat-number">500+</h3>
-                                <p class="stat-label">Clientes satisfechos</p>
+                                <h3 class="stat-number">{{ $about?->stat_2_value ?? '500+' }}</h3>
+                                <p class="stat-label">{{ $about?->stat_2_label ?? 'Clientes satisfechos' }}</p>
                             </div>
                         </div>
                         <div class="col-6 col-md-4 mb-3">
                             <div class="stat-card">
-                                <h3 class="stat-number">200+</h3>
-                                <p class="stat-label">Productos en catálogo</p>
+                                <h3 class="stat-number">{{ $about?->stat_3_value ?? '200+' }}</h3>
+                                <p class="stat-label">{{ $about?->stat_3_label ?? 'Productos en catálogo' }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="about-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1452195100486-9cc805987862?w=800" 
-                             alt="Productos DISTRI-JARCA" 
-                             class="img-fluid rounded-custom shadow-lg">
+                        <img src="{{ $about?->image_url ?? 'https://images.unsplash.com/photo-1452195100486-9cc805987862?w=800' }}" 
+                             alt="{{ $about?->image_alt ?? 'Productos DISTRI-JARCA' }}" 
+                             class="img-fluid rounded-custom shadow-lg"
+                             loading="lazy">
                         <div class="image-badge">
                             <i class="bi bi-award-fill"></i>
-                            <span>Calidad Certificada</span>
+                            <span>{{ $about?->badge_text ?? 'Calidad Certificada' }}</span>
                         </div>
                     </div>
                 </div>
@@ -151,6 +151,7 @@
                                 <img src="{{ $section->imagen_url }}" 
                                      alt="{{ $section->titulo }}" 
                                      class="img-fluid"
+                                     loading="lazy"
                                      onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=600'">
                                 @if($section->badge_texto)
                                     <div class="product-badge">{{ $section->badge_texto }}</div>
@@ -266,7 +267,7 @@
                 </div>
             </div>
 
-            <!-- Certificaciones -->
+            {{-- Certificaciones (DESHABILITADA)
             <div class="certifications-banner mt-5">
                 <div class="row align-items-center">
                     <div class="col-md-8">
@@ -285,6 +286,7 @@
                     </div>
                 </div>
             </div>
+            --}}
         </div>
     </section>
 
@@ -313,109 +315,14 @@
         </div>
     </section>
 
-    <!-- ========== SECCIÓN CONTACTO ========== -->
+    {{-- ========== SECCIÓN CONTACTO (DESHABILITADA) ==========
     <section id="contacto" class="section-padding">
         <div class="container">
             <div class="row">
-                <!-- Información de Contacto -->
-                <div class="col-lg-5 mb-5 mb-lg-0">
-                    <div class="section-label mb-3">Hablemos</div>
-                    <h2 class="section-title mb-4">Estamos para servirte</h2>
-                    <p class="text-muted mb-5">
-                        ¿Tienes un negocio y buscas un proveedor confiable? Contáctanos y 
-                        descubre cómo podemos ayudarte a ofrecer los mejores productos a tus clientes.
-                    </p>
-
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="bi bi-geo-alt-fill"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>Dirección</h4>
-                                <p>Av. Principal 123, Sector Industrial<br>Quito, Ecuador</p>
-                            </div>
-                        </div>
-
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="bi bi-telephone-fill"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>Teléfono</h4>
-                                <p>+593 2 123 4567<br>+593 99 123 4567</p>
-                            </div>
-                        </div>
-
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="bi bi-envelope-fill"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>Email</h4>
-                                <p>ventas@distrijarca.com<br>info@distrijarca.com</p>
-                            </div>
-                        </div>
-
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="bi bi-clock-fill"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>Horario de Atención</h4>
-                                <p>Lunes a Viernes: 8:00 - 18:00<br>Sábado: 8:00 - 13:00</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Formulario de Contacto -->
-                <div class="col-lg-7">
-                    <div class="contact-form-wrapper">
-                        <form class="contact-form" id="contactForm" action="{{ route('contact.send') }}" method="POST">
-                            @csrf
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="nombre" class="form-label">Nombre completo *</label>
-                                    <input type="text" class="form-control" id="nombre" name="nombre" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="empresa" class="form-label">Empresa</label>
-                                    <input type="text" class="form-control" id="empresa" name="empresa">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email *</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="telefono" class="form-label">Teléfono *</label>
-                                    <input type="tel" class="form-control" id="telefono" name="telefono" required>
-                                </div>
-                                <div class="col-12">
-                                    <label for="asunto" class="form-label">Asunto</label>
-                                    <select class="form-select" id="asunto" name="asunto">
-                                        <option selected>Consulta general</option>
-                                        <option>Solicitud de catálogo</option>
-                                        <option>Cotización</option>
-                                        <option>Ser distribuidor</option>
-                                        <option>Otro</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label for="mensaje" class="form-label">Mensaje *</label>
-                                    <textarea class="form-control" id="mensaje" name="mensaje" rows="5" required></textarea>
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-cta btn-lg w-100">
-                                        <i class="bi bi-send me-2"></i>Enviar Mensaje
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                Sección de contacto deshabilitada por solicitud del cliente
             </div>
         </div>
     </section>
+    --}}
 
 @endsection

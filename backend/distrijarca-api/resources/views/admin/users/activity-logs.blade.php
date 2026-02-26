@@ -31,7 +31,7 @@
         <div class="card">
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table log-table mb-0">
+                    <table id="activityLogsTable" class="table log-table mb-0">
                         <thead>
                             <tr>
                                 <th style="width: 80px;">ID</th>
@@ -85,11 +85,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="mt-4">
-            {{ $logs->links() }}
-        </div>
-
         <div class="card mt-4">
             <div class="card-header">
                 <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Información</h5>
@@ -109,8 +104,7 @@
                     <div class="col-md-6">
                         <h6>Estadísticas:</h6>
                         <ul class="list-unstyled">
-                            <li><strong>Total de registros:</strong> {{ $logs->total() }}</li>
-                            <li><strong>Página actual:</strong> {{ $logs->currentPage() }} de {{ $logs->lastPage() }}</li>
+                            <li><strong>Total de registros:</strong> {{ $totalLogs }}</li>
                             <li><strong>Mostrando:</strong> {{ $logs->count() }} registros</li>
                         </ul>
                     </div>
@@ -120,5 +114,45 @@
 @endsection
 
 @section('extra-js')
+<script>
+$(document).ready(function() {
+    $('#activityLogsTable').DataTable({
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay registros de actividad",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+            "infoFiltered": "(filtrado de _MAX_ registros totales)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ registros",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "No se encontraron registros",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            },
+            "aria": {
+                "sortAscending": ": activar para ordenar la columna de manera ascendente",
+                "sortDescending": ": activar para ordenar la columna de manera descendente"
+            }
+        },
+        pageLength: 25,
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+        order: [[5, 'desc']],
+        columnDefs: [
+            { orderable: false, targets: [0] }
+        ],
+        responsive: true,
+        dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+             '<"row"<"col-sm-12"tr>>' +
+             '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+    });
+});
+</script>
 <script src="{{ asset('admin/js/admin-script.js') }}"></script>
 @endsection

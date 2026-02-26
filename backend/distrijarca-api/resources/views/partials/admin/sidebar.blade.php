@@ -28,10 +28,6 @@
                 <i class="bi bi-grid-3x3"></i>
                 <span>Secciones Home</span>
             </a>
-            <a href="#" class="menu-item" data-tooltip="Mensajes">
-                <i class="bi bi-envelope"></i>
-                <span>Mensajes</span>
-            </a>
             <a href="#" class="menu-item" data-tooltip="Newsletter">
                 <i class="bi bi-mailbox"></i>
                 <span>Newsletter</span>
